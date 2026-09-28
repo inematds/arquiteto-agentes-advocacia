@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+<html data-theme="dark" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="arquiteto-agentes-advocacia-v5" name="curso"/>
+<title>Agentes en el despacho de abogados · Cuaderno · INEMA.CLUB PRO</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="../assets/aula.css" rel="stylesheet"/>
+<script>(function(){try{var m=document.querySelector('meta[name=curso]');var CK=(m&&m.content)||'v5:curso';var s=JSON.parse(localStorage.getItem(CK));if(s&&s.prefs&&s.prefs.theme)document.documentElement.setAttribute('data-theme',s.prefs.theme);}catch(e){}})();</script>
+<!--
+  PROTOCOLO DE DESCOBERTA (formato-curso-v5, Passo 0 — INFERIDO a partir do curso-base pffia e do pedido "cadernos por profissão", 2026-09-07; sujeito a correção do usuário):
+  - Público específico: advogados com escritório próprio e coordenadores de jurídico interno de empresas, que já fizeram ou vão fazer o curso-base Arquiteto de Trabalho com IA.
+  - Profissões-alvo (≥2): advogado de escritório próprio (3 a 5 advogados) · coordenadora de jurídico interno de empresa média (secundária: sócia que assina, no papel de quem aprova).
+  - Familiaridade com tecnologia: usa sistema de gestão de processos, serviço de publicações, editor de texto e chat de IA para textos; nunca programou.
+  - Resultado prático esperado: sair com um processo do escritório ou do jurídico mapeado e especificado no Kit do Arquiteto de Agentes, com sigilo profissional como restrição, prazo processual sempre chamando humano, e o agente nunca assinando nem protocolando.
+  - Tempo por sessão: 15–25 min por aula. Caderno complementar: 3 aulas, pressupõe o curso-base.
+
+  AUDITORIA ANTI-CLONE (contra pffia e os cadernos saúde/contábil):
+  - pffia usou o advogado Marcos na TRIAGEM DE AUTOS (aceitar caso). Aqui: Dr. Ribeiro (escritório próprio, CONTROLE DE PRAZOS e providências simples) e Camila (jurídico interno, CONTRATOS PADRÃO e demandas das áreas). Processos e situações distintos.
+  - Estrutura: aula 2 é FUNDAMENTO (não FERRAMENTA como nos outros cadernos), com prática tarefa. Quadros: aula 1 qba@1 · qanchor@4; aula 2 qba@2 · qanchor@4; aula 3 qapply@2 · qsteps@4. Modos: tarefa · tarefa · prompt.
+-->
+<style>
+  .view{display:none}.view.active{display:block}
+  .lnav{max-width:1160px;margin:0 auto 5vh;padding:0 clamp(24px,5vw,60px);display:flex;justify-content:space-between;gap:12px}
+  .lnav a{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--line2);border-radius:12px;padding:12px 16px}
+  .lnav a:hover{border-color:var(--accent);color:var(--ink)}
+  #v-trilha .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(24px,5vw,60px)}
+  #v-trilha .t-hero{position:relative;overflow:hidden;padding:20vh 0 8vh;border-bottom:1px solid var(--line)}
+  #v-trilha h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6.4vw,72px);line-height:1;letter-spacing:-.025em;margin:0 0 22px}
+  #v-trilha h1 em{font-style:italic;color:var(--accent)}
+  #v-trilha .lead{font-family:var(--serif);font-size:clamp(19px,2.1vw,24px);line-height:1.5;color:var(--ink-soft);max-width:46ch;margin:0 0 30px}
+  #v-trilha section{padding:8vh 0}
+  #v-trilha .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  #v-trilha h2{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(26px,3.6vw,38px);margin:0 0 28px}
+  #v-trilha .aulas{display:grid;gap:14px}
+  #v-trilha .au{display:grid;grid-template-columns:56px 1fr auto;gap:20px;align-items:center;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 24px}
+  #v-trilha .au .num{font-family:var(--serif);font-size:30px;color:var(--accent);text-align:center}
+  #v-trilha .au h3{font-family:var(--serif);font-weight:500;font-size:21px;margin:0 0 5px}
+  #v-trilha .au p{margin:0;color:var(--muted);font-size:14.5px}
+  #v-trilha .au .meta{font-family:var(--mono);font-size:11px;color:var(--accent);white-space:nowrap;text-align:right}
+  #v-trilha .au .prog{position:static;margin-top:10px;height:5px;border-radius:99px;background:var(--line);overflow:hidden;max-width:220px;width:auto}
+  #v-trilha .au .prog i{display:block;height:100%;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+  #v-trilha footer{max-width:1080px;margin:0 auto;padding:6vh clamp(24px,5vw,60px) 12vh;color:var(--faint);text-align:center;font-family:var(--serif);font-style:italic;border-top:1px solid var(--line)}
+  #v-trilha .fontes{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:70ch}
+  #v-trilha .fontes a{color:var(--ink-soft)}
+  @media(max-width:720px){#v-trilha .au{grid-template-columns:44px 1fr}#v-trilha .au .meta{grid-column:2;text-align:left}}
+</style>
+<link href="https://inematds.github.io/arquiteto-agentes-advocacia/curso.html" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/arquiteto-agentes-advocacia/en/curso.html" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/arquiteto-agentes-advocacia/es/curso.html" hreflang="es" rel="alternate"/></head>
+<body><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../curso.html" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../en/curso.html" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="./curso.html" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<div class="bar"><div class="bar-inner">
+<span class="brand"><a class="mark" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a><a class="pro" href="https://inema.pro" rel="noopener" target="_blank">PRO</a><a class="course" href="landing.html">Agentes en el despacho de abogados</a></span>
+<a class="back" href="#trilha" style="display:none">← ruta</a>
+<button class="pill" id="pill" style="display:none">0 leídas</button>
+<button id="revbtn">revisar <span id="revn">0</span></button>
+<button id="exbtn">ejercicios</button>
+<button id="jorbtn">jornada</button>
+<button aria-label="Cómo funciona" id="helpbtn">?</button>
+<button aria-label="Preferencias de lectura" id="prefsbtn">Aa</button>
+<button id="themebtn">tema: oscuro</button>
+</div></div>
+<section class="view" id="v-trilha">
+<header class="t-hero"><div class="wrap">
+<p class="kicker">Cuaderno profesional · Abogacía · 3 lecciones</p>
+<h1>Agentes en el despacho<br/>de <em>abogacía</em></h1>
+<p class="lead">Termina con un proceso de tu estudio jurídico o del área legal de la empresa especificado en el Kit del Arquitecto de Agentes: el agente lee, cuenta, prepara y resume; el abogado decide, firma y presenta. La confidencialidad como restricción fija y los plazos siempre bajo revisión humana.</p>
+</div></header>
+<section><div class="wrap">
+<div class="statcards"></div>
+<p class="eyebrow">Lecciones</p>
+<h2>De la publicación al borrador listo para firmar</h2>
+<div class="aulas">
+<a class="au on" data-aula="1" href="#aula-1">
+<div class="num">1</div>
+<div><h3>Diez procesos del despacho y lo que solo firma el abogado</h3><p>Termina con la lista de los diez procesos y uno de ellos mapeado en seis eslabones, con la línea entre preparar y firmar escrita.</p><div class="prog"><i></i></div></div>
+<div class="meta">22 min · abrir →</div>
+</a>
+<a class="au on" data-aula="2" href="#aula-2">
+<div class="num">2</div>
+<div><h3>Confidencialidad, plazos y responsabilidad: la gobernanza del agente jurídico</h3><p>Termina con la matriz de permisos de tu agente definida, la confidencialidad como restricción, los plazos siempre bajo revisión humana y los casos bajo secreto de justicia fuera de su alcance.</p><div class="prog"><i></i></div></div>
+<div class="meta">21 min · abrir →</div>
+</a>
+<a class="au on" data-aula="3" href="#aula-3">
+<div class="num">3</div>
+<div><h3>Tu especificación en el kit: control de plazos</h3><p>Termina con la especificación del agente preparada en el kit, a partir del preset de abogacía, y ensayada en un chat de IA.</p><div class="prog"><i></i></div></div>
+<div class="meta">24 min · abrir →</div>
+</a>
+</div>
+</div></section>
+<section><div class="wrap">
+<p class="eyebrow">Antes de empezar</p>
+<h2>Este cuaderno presupone el curso base</h2>
+<p class="fontes">Los seis eslabones, la solicitud de largo horizonte, la cadena, el inventario de contexto, la ficha de calidad y la matriz de permisos se explican en el curso <a href="https://inematds.github.io/pffia/" rel="noopener" target="_blank">Arquitecto de Trabajo con IA</a>. Aquí se aplican al estudio jurídico y al departamento legal interno. La práctica de la clase 3 usa el <a href="https://inematds.github.io/kit-arquiteto-agentes/" rel="noopener" target="_blank">Kit del Arquitecto de Agentes</a>, con la configuración preestablecida de abogacía.</p>
+</div></section>
+<footer><div class="wrap">Agentes en el despacho de abogados · INEMA.CLUB PRO</div></footer>
+</section>
+<!-- ===== AULA 1 · FUNDAMENTO ===== -->
+<section class="view" data-aula="1" data-tempo="22min" id="v-aula-1">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Cuaderno de Abogacía · Lección 1</p>
+<h1>Diez procesos del despacho,<br/><em>y lo que solo firma el abogado</em></h1>
+<p class="promise">Al final de esta lección podrás enumerar los diez procesos de tu despacho o departamento jurídico que un agente puede ejecutar, distinguir en cada uno qué implica preparar y qué implica decidir y firmar, y mapear uno de ellos en seis eslabones.</p>
+<p class="why">En un estudio jurídico, el miedo a la IA tiene nombre: alucinación. Si se inventa un precedente judicial en un escrito, la carrera del abogado queda en juego. El miedo es válido y señala la solución: el agente no redacta argumentos jurídicos, no cita jurisprudencia de memoria ni firma nada. Hace lo que hoy consume el tiempo del pasante y de la secretaria: leer publicaciones, calcular plazos, armar la agenda, preparar escritos para agregar al expediente y resúmenes, y cobrar honorarios. Dos horas al día por abogado. Ahí comienza el rediseño, con el abogado en el lugar de siempre: tomar decisiones y firmar.</p>
+<p class="cue"><span class="arw">↓</span> role para estudiar</p>
+</div>
+<!-- herofig · METÁFORA-DO-MUNDO-REAL: a mesa do advogado com a pilha de publicações do dia e a agenda de prazos, e a caneta-tinteiro sobre a folha a assinar -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<rect fill="#1a1824" height="40" rx="4" stroke="#948DA6" stroke-width="2" width="260" x="20" y="170"></rect>
+<rect fill="#ECE6D9" height="50" opacity=".6" rx="2" width="70" x="34" y="120"></rect><rect fill="#ECE6D9" height="50" opacity=".75" rx="2" width="70" x="38" y="112"></rect><rect fill="#ECE6D9" height="50" opacity=".9" rx="2" width="70" x="42" y="104"></rect>
+<path d="M50 116 h50 M50 124 h40 M50 132 h46 M50 140 h30" opacity=".45" stroke="#0E0D14" stroke-width="2"></path>
+<rect fill="#221f2e" height="74" rx="3" stroke="#948DA6" stroke-width="2" width="80" x="124" y="96"></rect>
+<path d="M124 114 h80 M144 96 v74 M164 96 v74 M184 96 v74 M124 132 h80 M124 150 h80" stroke="#37324a" stroke-width="1.5"></path>
+<rect fill="#F2B45C" height="14" opacity=".9" width="16" x="146" y="116"></rect><rect fill="#F2B45C" height="14" opacity=".9" width="16" x="186" y="134"></rect><rect fill="#7CE0C6" height="14" opacity=".9" width="16" x="166" y="152"></rect>
+<rect fill="#ECE6D9" height="60" opacity=".92" rx="2" width="60" x="216" y="110"></rect>
+<path d="M224 122 h44 M224 132 h36 M224 142 h40" opacity=".45" stroke="#0E0D14" stroke-width="2"></path>
+<path d="M226 158 q10 -10 20 0 t18 0" fill="none" opacity=".8" stroke="#0E0D14" stroke-width="2"></path>
+<path d="M256 150 l22 -40" stroke="#948DA6" stroke-linecap="round" stroke-width="5"></path><path d="M254 154 l3 -6" stroke="#F2B45C" stroke-linecap="round" stroke-width="5"></path>
+<path d="M210 60 v110" stroke="#F2B45C" stroke-dasharray="6 5" stroke-width="2"></path>
+<text fill="#7CE0C6" font-family="monospace" font-size="9" x="60" y="88">prepara</text>
+<text fill="#F2B45C" font-family="monospace" font-size="9" x="222" y="88">firma</text>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> Preparar es tarea del agente; decidir, redactar la tesis y firmar es tarea del abogado</h2>
+<p>La regla de este cuaderno cabe en tres verbos de cada lado. El agente <b>lee, cuenta y prepara</b>: lee la publicación, calcula el plazo en días hábiles, prepara la presentación, el resumen, el borrador de contrato estándar y el cobro de honorarios. El abogado <b>decide, redacta la tesis y firma</b>: decide la estrategia, redacta el escrito argumentativo, firma y presenta. Entre ambos lados hay una franja que nunca le corresponde al agente: citar jurisprudencia o doctrina de memoria. Si un texto necesita una cita, el agente marca «cita por verificar» y el abogado busca en la fuente.</p>
+<p>La prueba para decidir: ¿un pasante de primer año podría hacer esto sin que el abogado revise línea por línea? Si la respuesta es sí, es preparación y el agente puede hacerlo, con el abogado revisando el resultado. Si el abogado revisaría cada frase, es un argumento jurídico y se ocupa de él desde el primer borrador. No es una limitación de la tecnología; es la misma línea que ya separa al pasante del socio.</p>
+<!-- ex-prof --><p>El Dr. Ribeiro, en un despacho con tres abogados y 180 procesos, contó lo que el pasante y la secretaria hacen cada día: leer 40 publicaciones, calcular 15 plazos, registrar todo en la agenda, preparar 6 escritos de presentación y 3 solicitudes de prórroga, y reclamar 4 honorarios vencidos. Todo es preparación. Las dos contestaciones y el recurso de la semana requieren argumentación, y el pasante nunca se encargó de ellos más allá del formato.</p>
+<div class="qbefore-after">
+<div class="qba-col qba-before"><p class="qba-lbl">Antes</p><p class="qba-txt">El pasante lee las publicaciones a las 7h, calcula los plazos con el calendario de pared, los anota en una hoja de cálculo y les manda un mensaje a los abogados. Dos horas, y una vez al mes se calcula un plazo sin considerar el feriado local.</p></div>
+<div class="qba-col qba-depois"><p class="qba-lbl">Después</p><p class="qba-txt">El agente lee las publicaciones a las 6h, identifica el proceso y al responsable en el sistema, calcula el plazo con el calendario judicial y lo registra en la agenda de cada abogado, junto con un resumen de la publicación en cinco líneas y la medida sugerida. A las 8h, cada abogado abre su lista. El pasante revisa y prepara los escritos para agregar al expediente.</p></div>
+<div class="qba-saldo"><b>Balance:</b> de dos horas a veinte minutos de revisión, y el plazo contado sin feriados dejó de existir, porque el calendario judicial pasó a ser una fuente y no un recuerdo.</div>
+</div>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="fundamento">
+<h2><span class="n">02</span> Los diez procesos del estudio y del área jurídica interna</h2>
+<p>Los diez procesos críticos que casi todo estudio o departamento jurídico tiene: <b>control de plazos</b> a partir de las publicaciones; <b>intake</b> de cliente o nueva solicitud (qué llegó, de quién y con qué documentos); <b>contratos estándar</b> (borrador a partir del modelo, con las variables completadas); <b>seguimiento procesal</b> y un informe periódico al cliente o al área; <b>cobro de honorarios</b>; <b>gestión de documentos</b> (nombrar, archivar, encontrar); <b>preparación de investigación</b> (organizar el material que leerá el abogado, nunca decidir por él); <b>agenda de audiencias</b> y diligencias; <b>actas y registros</b> de reunión; y <b>respuestas frecuentes</b> («¿cuál es el estado de mi proceso?»).</p>
+<p>En todos, el agente prepara y el abogado decide y firma. Elige el primero según el criterio del curso base y una regla adicional de este cuaderno: empieza por el que tenga una regla clara y una consecuencia reversible. El control de plazos tiene una regla clara (calendario judicial) y el error se detecta en la revisión de las 8 h. Redactar un escrito con argumentos no entra en ninguna versión.</p>
+<!-- ex-prof --><p>Camila, coordinadora del área legal de una empresa con 400 empleados, tiene otro proceso en primer plano: los contratos estándar. Las áreas hacen sesenta solicitudes al mes, casi todas con el mismo modelo de prestación de servicios, pero con distintos nombres, montos y plazos. Dos abogados pasan la semana completando borradores. Es el proceso tres, y el agente que completa el modelo con las variables y marca lo que se sale del estándar se encarga de prepararlo de principio a fin.</p>
+<div class="quiz" data-answer="b">
+<p class="qk">Ponte a prueba</p><p class="q">Un área le pide a Camila un contrato «igual al del proveedor X, pero con una cláusula de exclusividad». ¿Qué parte puede hacer el agente?</p>
+<button class="opt" data-fb="Não. Redigir uma cláusula nova que não está no modelo é tese: define direito e obrigação. Fica com o advogado desde o rascunho." data-k="a">completar el modelo y redactar la cláusula de exclusividad</button>
+<button class="opt" data-fb="Isso. Preencher o modelo com as variáveis é preparar. A cláusula que não existe no modelo é marcada como 'fora do padrão, advogado redige', e o rascunho vai com esse aviso." data-k="b">completar el modelo con nombre, valor y plazo, y marcar la exclusividad como fuera de lo habitual</button>
+<button class="opt" data-fb="Perto. A parte do modelo o agente faz sem problema; devolver tudo ao advogado desperdiça o que é repetível." data-k="c">nada, porque la solicitud tiene una cláusula fuera de lo habitual</button>
+<p class="qfb"></p>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> Control de plazos en seis eslabones</h2>
+<p>Aplica el mapa del curso base al proceso más común del despacho. <b>Entrada</b>: a las 6h, el servicio de publicaciones entrega las <span class="gterm" data-def="Comunicação oficial do tribunal, publicada no diário da justiça, que informa o advogado de uma decisão ou de um prazo a cumprir num processo." tabindex="0">notificaciones</span> del día; el sistema del estudio tiene la lista de procesos con su responsable. <b>Decisiones de reglas</b>: ¿es una notificación con plazo? Contar los días hábiles y registrarla. ¿Es una providencia sin plazo? Solo registrarla. ¿Vence en menos de tres días hábiles? Marcarla como urgente. <b>Decisión de juicio</b>: ¿qué medida o tesis adoptar? Queda a cargo del abogado.</p>
+<p><b>Acción</b>: registrar el plazo en la agenda del responsable y preparar el borrador de un escrito sencillo (presentación, toma de conocimiento, solicitud de plazo) con el modelo del estudio. <b>Verificación</b>: el número de proceso existe en el sistema, el responsable es el correcto y la fecha está en días hábiles, teniendo en cuenta el feriado judicial. <b>Excepción</b>: proceso no registrado, cómputo dudoso (suspensión, receso, plazo doble), publicación que exige una tesis. <b>Resultado</b>: a las 8h, cada abogado sabe qué vence en los próximos cinco días hábiles, con el resumen y el borrador para revisar y firmar.</p>
+<!-- ex-prof --><p>En la primera ronda del Dr. Ribeiro, el agente calculó un plazo sin el feriado municipal, porque el calendario judicial adjunto era el del tribunal estatal y el feriado correspondía al distrito judicial. La verificación «fecha en días hábiles considerando los feriados» no lo detectó porque la fuente estaba incompleta. Nueva regla en el inventario: calendario judicial por distrito, responsable: la secretaria, actualizado cada mes. El error no volvió a ocurrir, y él descubrió que antes pasaba más de lo que sabía.</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> Contratos estándar en el área legal interna: el mismo mapa, otra firma</h2>
+<p>En el área jurídica de una empresa, el proceso cambia de nombre y mantiene la estructura. <b>Entrada</b>: solicitud de contrato del área, con el formulario de variables (partes, objeto, valor, plazo, fuero). <b>Decisiones de reglas</b>: ¿la solicitud corresponde a uno de los modelos aprobados? ¿Están completas las variables? ¿El valor está dentro del límite de autorización del área? <b>Juicio</b>: cláusula fuera del modelo, valor por encima del límite de autorización, contraparte en disputa con la empresa. Queda a cargo del abogado.</p>
+<p><b>Acción</b>: completar el borrador a partir del modelo y enumerar lo que se aparta del estándar. <b>Verificación</b>: cada variable completada viene del formulario, ninguna cláusula del modelo fue modificada, el valor coincide con la solicitud. <b>Excepción</b>: solicitud sin un modelo correspondiente, contraparte nueva, cláusula solicitada que no existe. <b>Resultado</b>: el abogado revisa un borrador listo con los puntos fuera del estándar señalados, en vez de completarlo desde cero. Él sigue siendo quien firma y el área nunca recibe un borrador que no haya pasado por él.</p>
+<!-- ex-prof --><p>Camila pensó que el beneficio sería ahorrar tiempo, y así fue: pasó de una semana a un día al mes para completar los formularios. Pero la dirección jurídica notó otro beneficio: como el agente marcaba "cláusula modificada con respecto al modelo" en cada borrador, aparecieron tres contratos antiguos en los que un área había cambiado el modelo por su cuenta. Antes, nadie lo veía. Ahora, se verifica cada vez.</p>
+<div class="qanchor"><p>El agente jurídico nunca tiene la última palabra. Hace la primera lectura, el cálculo y el borrador; la palabra es del abogado, y también la firma.</p></div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="tarefa" data-practice="p1">
+<p class="pk">Practica ahora <span class="pcount">0/4 completadas</span></p>
+<h3 class="ph">Elige el proceso y escribe dónde queda la firma</h3>
+<p class="pgoal">En unos 12 minutos, enumera los diez procesos de tu despacho o área legal, elige uno con una regla clara y una consecuencia reversible, y trázalo en seis eslabones, marcando la división entre preparar y firmar.</p>
+<p class="psafe">Es tu propio papel o planilla, sin nombre de cliente ni número de proceso real: escribes procesos de trabajo, no casos. Nada cambia en el sistema. Si un proceso parece terminar con el agente redactando algo que argumenta, anótalo al margen: es la señal de que la línea está en el lugar equivocado.</p>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> Copia la lista de los diez procesos del paso 02 y ajústala a tu realidad. Junto a cada uno, indica quién lo prepara hoy, quién decide y firma, y cuánto tiempo lleva por semana.</label></li>
+<li><label><input data-ptask="2" type="checkbox"/> Aplica la prueba del pasante de primer año: ¿el abogado revisaría línea por línea? Si es así, es una tesis y debe salir de la lista del agente. Marca también dónde se cita jurisprudencia: ahí el agente solo escribe "por verificar".</label></li>
+<li><label><input data-ptask="3" type="checkbox"/> Elige un proceso con una regla clara y una consecuencia reversible (plazos, contratos estándar, cobros, intake). Escribe el resultado en una frase: qué pasa a saber o tener el abogado y a qué hora.</label></li>
+<li><label><input data-ptask="4" type="checkbox"/> Traza los seis eslabones, marca R o J en las decisiones y anota la verificación junto a cada acción. Estará listo cuando la última acción del agente sea «preparar para revisión» o «registrar», nunca «presentar», «firmar» o «enviar al cliente», y exista la excepción «plazo con cómputo dudoso → abogado».</label></li>
+</ol>
+<p class="pdone">Acabas de trazar, en un proceso real, la línea entre lo que prepara un agente y lo que solo el abogado decide y firma. Este mapa se incorpora al kit en la clase 3, y en la matriz la línea queda como «aprobar: no puede».</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; os três verbos de cada lado. À esquerda, ler, contar, preparar: território do agente, com o advogado revisando o resultado. À direita, decidir, redigir tese, assinar: território do advogado desde o rascunho. No meio, a faixa vermelha que nunca é do agente: citar jurisprudência de memória." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="120" rx="8" stroke="#7CE0C6" stroke-width="1.5" width="80" x="12" y="30"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="8" x="24" y="50">agente</text>
+<g fill="#ECE6D9" font-family="monospace" font-size="8"><text x="24" y="76">leer</text><text x="24" y="96">contar</text><text x="24" y="116">preparar</text></g>
+<text fill="#948DA6" font-family="monospace" font-size="6.5" x="24" y="140">el abogado revisa</text>
+<rect height="120" rx="8" stroke="#F2B45C" stroke-width="1.5" width="80" x="128" y="30"></rect>
+<text fill="#F2B45C" font-family="monospace" font-size="8" x="140" y="50">abogado</text>
+<g fill="#ECE6D9" font-family="monospace" font-size="8"><text x="140" y="76">decidir</text><text x="140" y="96">redactar una tesis</text><text x="140" y="116">firmar</text></g>
+<text fill="#948DA6" font-family="monospace" font-size="6.5" x="140" y="140">desde el borrador</text>
+<rect fill="#E0736F" height="120" opacity=".18" rx="4" stroke="#E0736F" stroke-dasharray="3 3" stroke-width="1.2" width="28" x="96" y="30"></rect>
+<text fill="#E0736F" font-family="monospace" font-size="6" transform="rotate(-90 110 92)" x="110" y="92">jurisprudencia de memoria</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="20" y="176">"cita por verificar" → el abogado busca en la fuente</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="20" y="190">la línea entre pasante y socio, por escrito</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; os dez processos do escritório e do jurídico. Os verdes (prazos, contratos padrão, cobrança, intake) têm regra clara e consequência recuperável: por onde começar. O tracejado vermelho ao lado de 'pesquisa' lembra: organizar o material sim, concluir por ele nunca." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<g fill="#ECE6D9" font-family="monospace" font-size="6.5">
+<rect fill="#7CE0C6" height="15" opacity=".85" rx="3" width="92" x="12" y="14"></rect><text fill="#0E0D14" x="16" y="25">control de plazos</text>
+<rect fill="#7CE0C6" height="15" opacity=".85" rx="3" width="92" x="12" y="33"></rect><text fill="#0E0D14" x="16" y="44">intake</text>
+<rect fill="#7CE0C6" height="15" opacity=".85" rx="3" width="92" x="12" y="52"></rect><text fill="#0E0D14" x="16" y="63">contratos estándar</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="92" x="12" y="71"></rect><text x="16" y="82">seguimiento</text>
+<rect fill="#7CE0C6" height="15" opacity=".85" rx="3" width="92" x="12" y="90"></rect><text fill="#0E0D14" x="16" y="101">cobro de honorarios</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="92" x="116" y="14"></rect><text x="120" y="25">documentos</text>
+<rect height="15" rx="3" stroke="#E0736F" stroke-dasharray="3 3" stroke-width="1" width="92" x="116" y="33"></rect><text x="120" y="44">preparación de investigación</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="92" x="116" y="52"></rect><text x="120" y="63">audiencias</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="92" x="116" y="71"></rect><text x="120" y="82">actas</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="92" x="116" y="90"></rect><text x="120" y="101">"¿cuál es el estado?"</text>
+</g>
+<text fill="#7CE0C6" font-family="monospace" font-size="7.5" x="12" y="132">verde: regla clara + error recuperable</text>
+<text fill="#E0736F" font-family="monospace" font-size="7.5" x="12" y="146">investiga: organiza, nunca concluye</text>
+<rect height="22" rx="4" stroke="#E0736F" stroke-dasharray="3 3" stroke-width="1.2" width="196" x="12" y="160"></rect><text fill="#E0736F" font-family="monospace" font-size="7" x="18" y="175">redactar un escrito con argumentos: ninguna versión</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; o controle de prazos em seis elos. Publicações entram às 6h; o agente identifica processo e responsável, conta o prazo com o calendário forense, registra e prepara o rascunho simples. A verificação confere número, responsável e data. Contagem duvidosa, processo desconhecido e publicação que exige tese (âmbar) sobem ao advogado. Às 8h, a lista de cada um." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect height="20" rx="4" stroke="#948DA6" stroke-width="1.5" width="80" x="12" y="14"></rect><text fill="#ECE6D9" font-family="monospace" font-size="7" x="16" y="28">publicaciones 6h</text>
+<path d="M52 34 v12" stroke="#948DA6" stroke-width="1.2"></path>
+<rect height="20" rx="4" stroke="#948DA6" stroke-width="1.5" width="80" x="12" y="46"></rect><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="60">proceso + responsable</text>
+<path d="M52 66 v12" stroke="#948DA6" stroke-width="1.2"></path>
+<rect height="20" rx="4" stroke="#948DA6" stroke-width="1.5" width="80" x="12" y="78"></rect><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="92">cuenta c/ calendario</text>
+<path d="M52 98 v12" stroke="#7CE0C6" stroke-width="1.2"></path>
+<rect height="20" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="80" x="12" y="110"></rect><text fill="#7CE0C6" font-family="monospace" font-size="6.5" x="16" y="124">n.º · resp. · ¿fecha correcta?</text>
+<path d="M52 130 v12" stroke="#7CE0C6" stroke-width="1.2"></path>
+<rect fill="#221f2e" height="22" rx="5" stroke="#7CE0C6" stroke-width="1.5" width="80" x="12" y="142"></rect><text fill="#7CE0C6" font-family="monospace" font-size="6.5" x="16" y="157">8h: lista + borrador</text>
+<path d="M92 88 h20" stroke="#F2B45C" stroke-width="1.2"></path>
+<rect height="56" rx="4" stroke="#F2B45C" stroke-width="1.5" width="96" x="112" y="60"></rect><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="118" y="74">cómputo dudoso</text><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="118" y="86">proceso desconocido</text><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="118" y="98">exige una tesis</text><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="118" y="110">vence en &lt; 1 día hábil</text>
+<path d="M160 116 v12" stroke="#F2B45C" stroke-width="1.2"></path><circle cx="160" cy="138" r="9" stroke="#F2B45C" stroke-width="1.5"></circle><text fill="#F2B45C" font-family="monospace" font-size="8" x="156" y="142">H</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="112" y="166">el plazo siempre requiere intervención humana</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="12" y="190">calendario judicial por comarca, con responsable</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; contratos padrão em seis elos. O pedido da área entra com o formulário de variáveis; três regras (cabe no modelo? variáveis completas? dentro da alçada?); a minuta sai preenchida com o que fugiu do padrão marcado. O advogado revisa e assina; a área nunca recebe minuta que não passou por ele." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect height="20" rx="4" stroke="#948DA6" stroke-width="1.5" width="90" x="12" y="14"></rect><text fill="#ECE6D9" font-family="monospace" font-size="7" x="16" y="28">solicitud + formulario</text>
+<path d="M57 34 v12" stroke="#948DA6" stroke-width="1.2"></path>
+<rect height="40" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="90" x="12" y="46"></rect><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="59">¿cabe en un modelo?</text><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="70">¿variables completas?</text><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="81">¿dentro de sus atribuciones?</text>
+<path d="M57 86 v12" stroke="#7CE0C6" stroke-width="1.2"></path>
+<rect fill="#221f2e" height="22" rx="5" stroke="#7CE0C6" stroke-width="1.5" width="90" x="12" y="98"></rect><text fill="#7CE0C6" font-family="monospace" font-size="6.5" x="16" y="113">borrador + fuera de lo habitual</text>
+<path d="M102 66 h22" stroke="#F2B45C" stroke-width="1.2"></path>
+<rect height="32" rx="4" stroke="#F2B45C" stroke-width="1.5" width="84" x="124" y="50"></rect><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="128" y="63">sin modelo · cláusula</text><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="128" y="75">nueva · contraparte en litigio</text>
+<path d="M57 120 v14" stroke="#948DA6" stroke-width="1.2"></path>
+<circle cx="57" cy="144" r="10" stroke="#F2B45C" stroke-width="1.5"></circle><text fill="#F2B45C" font-family="monospace" font-size="9" x="53" y="148">H</text><text fill="#948DA6" font-family="monospace" font-size="7" x="72" y="148">el abogado revisa y firma</text>
+<path d="M57 154 v12" stroke="#948DA6" stroke-width="1.2"></path>
+<rect height="20" rx="4" stroke="#948DA6" stroke-width="1.2" width="90" x="12" y="166"></rect><text fill="#ECE6D9" font-family="monospace" font-size="6.5" x="16" y="180">el área recibe</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="110" y="180">nunca sin pasar por él</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>Tres verbos de cada lado: el agente lee, cuenta y prepara; el abogado decide, redacta la tesis y firma. Citar jurisprudencia de memoria nunca es tarea del agente: escribe «por verificar».</li>
+<li>Los diez procesos del estudio y del área jurídica caben en esta línea. Empieza por lo que tiene reglas claras y errores que se pueden corregir: plazos, contratos estándar, cobros, recepción de casos.</li>
+<li>En el control de plazos, la fuente es el calendario judicial por distrito, con un responsable asignado, y cualquier cálculo dudoso o publicación que requiera una tesis se deriva al abogado.</li>
+<li>En los contratos estándar, el agente completa la plantilla y marca lo que se desvió de ella; el abogado se encarga de la cláusula nueva desde el primer borrador, y el área nunca recibe un borrador que no haya pasado por él.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu siguiente paso</p>
+<p class="na-win">Acabas de trazar, en un proceso real, la línea entre lo que prepara un agente y lo que solo el abogado decide y firma.</p>
+<p class="na-action">En los próximos 15 minutos, pregúntale al pasante o a la secretaria: «de todo lo que preparas, ¿qué es lo que más te pide rehacer el abogado?». La respuesta es la primera condición de tu ficha de calidad.</p>
+<p class="na-hook">En la próxima clase decidirás la gobernanza del agente jurídico: secreto como restricción fija, los plazos siempre requieren intervención humana, los casos bajo secreto de justicia quedan fuera de su alcance y la matriz la firma la socia.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#trilha">← ruta</a><a href="#aula-2">siguiente: confidencialidad, plazo y responsabilidad →</a></nav>
+<footer>Lección 1 · Agentes en el despacho de abogados · INEMA.CLUB PRO</footer>
+<script id="cards-1" type="application/json">
+[
+  {"front":"O sócio quer que o agente redija o rascunho da contestação 'para o advogado só revisar'. Que teste você aplica, e o que o agente faz em vez disso?","back":"O teste do estagiário: o advogado revisaria linha por linha? Sim, contestação é tese. O agente prepara o resumo dos fatos e a lista de prazos e documentos; quem escreve a peça, da primeira linha em diante, é o advogado."},
+  {"front":"Dois processos passam nos critérios: controle de prazos e resposta a 'qual o status do meu processo?' para clientes. Qual entra primeiro, e por quê?","back":"Prazos: regra clara (calendário forense) e erro pego na revisão das 8h. A resposta ao cliente sai do escritório e toca sigilo; entra depois, e só com texto padrão aprovado."},
+  {"front":"Qual a diferença entre a exceção 'processo não cadastrado' e a exceção 'contagem duvidosa' quanto a quem resolve?","back":"Processo não cadastrado vai para a secretária, que cadastra ou descarta. Contagem duvidosa (suspensão, recesso, dobro) muda o prazo em si: fica com o advogado responsável."},
+  {"front":"Uma área pediu contrato pelo modelo, mas com valor acima da alçada dela. O que o agente faz com a minuta?","back":"Preenche o modelo normalmente e marca 'valor acima da alçada da área' como fora do padrão. A minuta vai ao advogado com o aviso; ele decide se pede aprovação da diretoria antes de assinar."},
+  {"front":"Por que o agente escreve 'citação a conferir' em vez de buscar a jurisprudência ele mesmo?","back":"Porque citação de memória é onde a IA inventa, e uma jurisprudência inexistente numa peça compromete o advogado. O agente marca o ponto; o advogado busca na fonte e cola a referência real."}
+]
+</script>
+<!-- COMPLETUDE aula-1 | tipo=FUNDAMENTO | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="22min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Dr. Ribeiro escritório próprio, Camila jurídico interno, Dr. Ribeiro, Camila)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="tarefa"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~12 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-1"> presente (5 cartões: aplicação, decisão, contraste, aplicação, pergunta)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [OK] teste-se-FUND      tipo=FUNDAMENTO: presente (1 quiz data-fb, step 02)
+  dosagem: quiz + cartões + qbefore-after (step 01) + qanchor (step 04) = 4 obrigatórios (teto 5). densidade: 2 quadros em 4 steps, não adjacentes. jargão de domínio: intimação (.gterm).
+-->
+</section>
+<!-- ===== AULA 2 · FUNDAMENTO ===== -->
+<section class="view" data-aula="2" data-tempo="21min" id="v-aula-2">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Cuaderno de Abogacía · Lección 2</p>
+<h1>Confidencialidad, plazos y responsabilidad:<br/><em>la gobernanza del agente jurídico</em></h1>
+<p class="promise">Al final de esta lección podrás decidir la matriz de permisos de un agente jurídico, con el secreto profesional como restricción fija, los plazos procesales siempre sujetos a la intervención humana, los casos bajo secreto de justicia fuera de su alcance y un abogado responsable por cada línea.</p>
+<p class="why">En la práctica jurídica, hay tres cosas que no son «con aprobación»: el secreto profesional, que es deber del abogado y no de la herramienta; el plazo, que una vez vencido no vuelve; y la responsabilidad, que la OAB atribuye a quien firma, nunca a quien preparó. Un agente que no respeta las tres es un riesgo que ningún seguro de responsabilidad cubre. La buena noticia es la misma de la clase anterior: el agente no necesita nada más que lo que ya ve el pasante para hacer el 80% del trabajo. Esta clase establece el límite alrededor de ese territorio.</p>
+<p class="cue"><span class="arw">↓</span> role para estudiar</p>
+</div>
+<!-- herofig · METÁFORA-DO-MUNDO-REAL: a pasta lacrada de segredo de justiça ao lado da agenda de prazos aberta e do calendário com feriados marcados -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<rect fill="#221f2e" height="120" rx="4" stroke="#948DA6" stroke-width="2" width="90" x="30" y="60"></rect>
+<rect fill="#E0736F" height="18" opacity=".85" rx="4" width="90" x="30" y="60"></rect>
+<path d="M60 120 h30" stroke="#E0736F" stroke-width="3"></path><rect fill="#E0736F" height="14" rx="2" width="18" x="66" y="126"></rect><path d="M70 126 v-6 a5 5 0 0 1 10 0 v6" fill="none" stroke="#E0736F" stroke-width="2.5"></path>
+<text fill="#E0736F" font-family="monospace" font-size="8" x="38" y="200">secreto de justicia</text>
+<rect fill="#ECE6D9" height="100" opacity=".92" rx="4" width="130" x="140" y="40"></rect>
+<path d="M150 58 h110 M150 78 h110 M150 98 h110 M150 118 h110" opacity=".25" stroke="#0E0D14" stroke-width="1.5"></path>
+<rect fill="#7CE0C6" height="10" rx="2" width="50" x="154" y="64"></rect><rect fill="#F2B45C" height="10" rx="2" width="70" x="154" y="84"></rect><rect fill="#7CE0C6" height="10" rx="2" width="40" x="154" y="104"></rect><rect fill="#7CE0C6" height="10" rx="2" width="60" x="154" y="124"></rect>
+<rect fill="#1a1824" height="60" rx="4" stroke="#948DA6" stroke-width="2" width="130" x="140" y="150"></rect>
+<g fill="#948DA6"><rect height="10" rx="1" width="12" x="148" y="160"></rect><rect height="10" rx="1" width="12" x="164" y="160"></rect><rect height="10" rx="1" width="12" x="180" y="160"></rect><rect height="10" rx="1" width="12" x="212" y="160"></rect><rect height="10" rx="1" width="12" x="228" y="160"></rect><rect height="10" rx="1" width="12" x="244" y="160"></rect><rect height="10" rx="1" width="12" x="148" y="176"></rect><rect height="10" rx="1" width="12" x="164" y="176"></rect><rect height="10" rx="1" width="12" x="196" y="176"></rect><rect height="10" rx="1" width="12" x="212" y="176"></rect><rect height="10" rx="1" width="12" x="228" y="176"></rect><rect height="10" rx="1" width="12" x="244" y="176"></rect><rect height="10" rx="1" width="12" x="148" y="192"></rect><rect height="10" rx="1" width="12" x="164" y="192"></rect><rect height="10" rx="1" width="12" x="180" y="192"></rect><rect height="10" rx="1" width="12" x="196" y="192"></rect></g>
+<rect fill="#F2B45C" height="10" rx="1" width="12" x="196" y="160"></rect><rect fill="#F2B45C" height="10" rx="1" width="12" x="180" y="176"></rect>
+<path d="M130 30 v190" stroke="#F2B45C" stroke-dasharray="6 5" stroke-width="2"></path>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> La confidencialidad profesional es una restricción del encargo, no una configuración del sistema</h2>
+<p>El secreto profesional del abogado cubre todo lo que el cliente le confió y todo lo que está en el expediente. Para el agente, esto se convierte en una restricción escrita en la solicitud, en la primera línea: «ninguna información de un proceso o de un cliente sale del sistema del estudio en un mensaje, resumen o borrador dirigido al exterior». En la práctica, el agente jurídico trabaja solo dentro del sistema: lee publicaciones, registra información en el sistema y prepara borradores que se quedan en el sistema. Nada se envía al cliente, a la contraparte ni a un servicio externo sin pasar por el abogado.</p>
+<p>Esto determina dónde se ejecuta el agente. Un chat de IA genérico, incluso con una carpeta de proyecto, es un servicio externo al despacho: sirve para aprender con casos ficticios y para modelos sin datos de procesos, y para nada más. Para trabajar con casos reales, el agente queda en el sistema de gestión del despacho o en un servicio contratado con un acuerdo de confidencialidad que el abogado haya leído. No se trata de la herramienta, sino de dónde circulan los datos.</p>
+<!-- ex-prof --><p>El Dr. Ribeiro empezó a probar el control de plazos en un chat de IA con publicaciones reales, «solo para ver si calcula bien». Se detuvo el segundo día: las publicaciones tienen los nombres de las partes y el número del proceso. Repitió la prueba con publicaciones inventadas, con la misma estructura y nombres cambiados. La lógica del cómputo se probó igual y ningún nombre de cliente salió del despacho.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="fundamento">
+<h2><span class="n">02</span> El plazo procesal es la excepción que siempre requiere intervención humana</h2>
+<p>En el curso base, las excepciones se derivan a una persona. En la práctica jurídica, el plazo es una excepción por definición: una vez vencido, no vuelve, y la consecuencia recae sobre el abogado. Por eso la regla de este cuaderno es más estricta que la general: <b>toda cuenta que no sea trivial consulta al abogado</b>, e incluso la trivial la revisa él en la lista de las 8h. El cómputo trivial es en días hábiles, con el calendario judicial de la jurisdicción. Cualquier cosa más allá de eso, suspensión, receso, plazo doble, notificación repetida, publicación en dos diarios, se deriva al abogado sin que el agente registre ninguna fecha.</p>
+<p>Y existe el límite de tiempo: un plazo que vence en menos de un día hábil no va a la lista de las 8 h; se avisa al abogado de inmediato, por cualquier canal que haya acordado. Es la única situación en la que el agente jurídico interrumpe a alguien. El resto espera la revisión.</p>
+<!-- ex-prof --><p>Camila, en el área legal interna, tiene menos plazos procesales y más plazos contractuales: renovación automática, preaviso de rescisión, vencimiento de garantía. Aplicó la misma regla: el agente enumera lo que vence en los próximos 30 días y marca en rojo lo que vence en menos de 5; a lo que tiene una cláusula de cómputo ambigua («días corridos a partir de la notificación», sin fecha de notificación registrada) no le asigna una fecha, sino que plantea una pregunta para el abogado.</p>
+<div class="qbefore-after">
+<div class="qba-col qba-before"><p class="qba-lbl">Antes</p><p class="qba-txt">El pasante calculaba todos los plazos, incluso los dudosos, y anotaba la fecha que consideraba correcta. El abogado revisaba si tenía tiempo. Una vez cada semestre, un plazo duplicado se calculaba como simple.</p></div>
+<div class="qba-col qba-depois"><p class="qba-lbl">Después</p><p class="qba-txt">El agente registra solo los cálculos sencillos y devuelve los dudosos como una pregunta, con el motivo: «¿plazo duplicado? ¿litisconsortes con abogados diferentes?». El abogado responde en un minuto y la respuesta se convierte en una regla para la próxima vez.</p></div>
+<div class="qba-saldo"><b>Balance:</b> de «creía que estaba bien» a «pregunta antes», y el plazo contado al doble de forma simple dejó de aplicarse, porque el agente no tiene permiso para inventar fechas.</div>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> Qué queda fuera de su alcance: los casos bajo secreto de justicia, los documentos de las partes, la conversación con el cliente</h2>
+<p>Hay tres categorías fuera del alcance del agente, sin «con aprobación». Procesos bajo <span class="gterm" data-def="Regime em que o tribunal restringe o acesso aos autos às partes e seus advogados, por envolver família, menores, intimidade ou interesse público. Vazar conteúdo é infração grave." tabindex="0">secreto de justicia</span>: el agente sabe que existen y que tienen un plazo, pero no lee el contenido; el abogado se encarga por su cuenta. <b>Documentos personales de las partes</b> (identidad, comprobantes, informes adjuntos): el agente trabaja con el número de proceso, las partes y las fechas, no con el documento. Y la <b>comunicación abogado-cliente</b>: los correos electrónicos, mensajes y notas de reunión quedan fuera, porque son el núcleo del secreto profesional.</p>
+<p>Qué incluye: publicaciones, lista de procesos con responsable, calendario judicial, plantillas para escritos simples, plantillas de contratos, formularios de variables, tabla de honorarios. Ten en cuenta que el pasante de primer año también ve todo esto. El límite del agente es el límite del pasante, puesto por escrito.</p>
+<!-- ex-prof --><p>En el estudio del Dr. Ribeiro, doce de los 180 procesos son de familia y están bajo secreto. La regla quedó así: el sistema marca «secreto» y el agente, al leer la publicación, solo registra «proceso bajo secreto, el abogado debe calcular el plazo» en la agenda, sin resumen. La Dra. Castro, que lleva los casos de familia, pensó que perdería el beneficio; descubrió que la alerta de plazo ya era lo que más necesitaba.</p>
+<div class="quiz" data-answer="b">
+<p class="qk">Ponte a prueba</p><p class="q">Un cliente le envía por correo electrónico al abogado un comprobante de pago para incorporarlo al expediente. ¿Puede el agente leer ese correo para preparar la incorporación?</p>
+<button class="opt" data-fb="Não. A comunicação advogado-cliente é o núcleo do sigilo, e o documento pessoal da parte também fica fora. Nem com aprovação: a cerca é a mesma do estagiário." data-k="a">sí, porque es un documento simple y adjuntarlo es una tarea de preparación</button>
+<button class="opt" data-fb="Exato. O e-mail com o cliente e o documento da parte ficam fora do alcance. O advogado ou a secretária anexa ao processo no sistema; a partir dali o agente prepara a juntada com número, partes e data." data-k="b">no: el abogado o la secretaria lo adjunta al sistema, y solo entonces el agente prepara la presentación</button>
+<button class="opt" data-fb="Perto, mas 'com aprovação' não se aplica a dado que fica fora do alcance. Aprovar depois não desfaz o agente ter lido a conversa com o cliente." data-k="c">sí, siempre que el abogado apruebe la lectura después</button>
+<p class="qfb"></p>
+</div>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> La matriz del agente jurídico y el pie de página que firma la socia</h2>
+<p>Las siete acciones del curso base en el agente de plazos y diligencias: <b>leer</b> publicaciones, lista de procesos, calendario y modelos, puede; <b>escribir</b> plazo en la agenda y borrador en el sistema, puede; <b>cambiar</b> plazo ya registrado por un abogado, con aprobación de la secretaria, y nunca sin registro; <b>enviar</b>, no puede, el agente no saca nada del sistema; <b>comprar</b>, no puede; <b>borrar</b>, no puede; <b>aprobar</b> (firmar, presentar, interponer escritos), no puede. Es la matriz más estricta de los tres cuadernos, y es la que corresponde.</p>
+<p>Cada línea tiene un abogado responsable, con nombre y número de la OAB, porque la responsabilidad es suya. Y cada acción queda registrada: publicación leída, plazo calculado con qué calendario, borrador preparado con qué modelo. El pie de página que pidió escribir la socia: «el agente no firma, no presenta, no envía ni lee procesos bajo secreto de justicia». Esa fue la frase que convirtió una reunión de dos horas en una de veinte minutos.</p>
+<!-- ex-prof --><p>En el área jurídica de Camila, la matriz tiene una línea diferente: «enviar borrador al área: con aprobación», porque el área es interna. Aun así, ningún borrador se envía sin que el abogado haga clic. La dirección jurídica quiso ir más allá y escribir en el pie de página: «todo borrador enviado por el agente lleva el nombre del abogado que lo revisó». Se convirtió en la línea más leída de todo el documento.</p>
+<div class="qanchor"><p>El límite del agente jurídico es el límite del pasante de primer año, por escrito. Lo que el pasante no ve ni firma, el agente tampoco.</p></div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="tarefa" data-practice="p2">
+<p class="pk">Practica ahora <span class="pcount">0/4 completadas</span></p>
+<h3 class="ph">La matriz de tu agente jurídico, con el pie de página</h3>
+<p class="pgoal">En unos 12 minutos, completa la matriz de permisos del proceso elegido en la lección 1 (siete acciones, respuesta, abogado responsable), la lista de lo que queda fuera del alcance y el pie de una frase.</p>
+<p class="psafe">Es tu propio papel o planilla, sin número de proceso ni nombre de cliente: escribes reglas, no casos. No se configura ningún sistema ni se concede ningún permiso. La matriz queda contigo para llevarla a la socia o a la dirección jurídica. Si una línea parece demasiado ajustada, déjala así: flexibilizarla es una decisión para tomar después de meses de registro limpio.</p>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> En una hoja de cálculo, las siete acciones (leer, escribir, modificar, enviar, comprar, borrar, aprobar), con la respuesta (puede, con aprobación, no puede) y el abogado responsable de cada línea, con nombre. En el estudio, «enviar», «borrar» y «aprobar» son acciones que el agente no puede realizar; en el área jurídica de una empresa, «enviar internamente» puede ser «con aprobación».</label></li>
+<li><label><input data-ptask="2" type="checkbox"/> Debajo, la lista de lo que queda fuera del alcance: procesos bajo secreto judicial (solo la alerta de plazo), documentos personales de las partes, comunicación entre abogado y cliente, y cualquier otra cosa específica de tu despacho.</label></li>
+<li><label><input data-ptask="3" type="checkbox"/> Escribe la regla de plazos en dos líneas: qué cómputo es sencillo (el agente lo registra) y qué requiere consultar al abogado (todo lo demás; cualquier cosa que venza en menos de un día hábil requiere avisarle de inmediato).</label></li>
+<li><label><input data-ptask="4" type="checkbox"/> Escribe el pie en una frase, con este formato: «el agente no ___, no ___, no ___ y no lee ___». Estará listo cuando ninguna línea quede sin un abogado responsable, el secreto judicial esté en la lista de lo que queda fuera del alcance y el pie responda la pregunta que haría primero la socia.</label></li>
+</ol>
+<p class="pdone">Acabas de escribir la gobernanza de un agente jurídico, con los límites de un pasante y la responsabilidad en el lugar de siempre. Esta hoja se convierte en el bloque 7 del kit en la próxima clase, y el pie de página va al inicio de la especificación.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; o agente jurídico trabalha só dentro do sistema do escritório (caixa verde): lê publicações, registra, prepara rascunhos que ficam lá. Tudo que sai (cliente, contraparte, serviço externo) passa pelo advogado (círculo âmbar). O chat genérico (tracejado) só recebe casos fictícios." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="120" rx="8" stroke="#7CE0C6" stroke-width="1.5" width="120" x="12" y="30"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="7.5" x="20" y="46">sistema del despacho</text>
+<g fill="#ECE6D9" font-family="monospace" font-size="6.5">
+<rect height="16" rx="3" stroke="#948DA6" stroke-width="1" width="104" x="20" y="56"></rect><text x="24" y="67">publicaciones</text>
+<rect height="16" rx="3" stroke="#948DA6" stroke-width="1" width="104" x="20" y="78"></rect><text x="24" y="89">agenda de plazos</text>
+<rect height="16" rx="3" stroke="#948DA6" stroke-width="1" width="104" x="20" y="100"></rect><text x="24" y="111">borradores</text>
+</g>
+<rect height="18" rx="4" stroke="#7CE0C6" stroke-width="1.2" width="104" x="20" y="124"></rect><text fill="#7CE0C6" font-family="monospace" font-size="7" x="52" y="136">agente</text>
+<path d="M132 90 h20" stroke="#F2B45C" stroke-width="1.5"></path><circle cx="164" cy="90" r="10" stroke="#F2B45C" stroke-width="1.5"></circle><text fill="#F2B45C" font-family="monospace" font-size="9" x="160" y="94">H</text>
+<path d="M174 90 h22" stroke="#948DA6" stroke-width="1.2"></path>
+<g fill="#948DA6" font-family="monospace" font-size="6.5"><text x="180" y="60">cliente</text><text x="180" y="76">contraparte</text><text x="180" y="112">externo</text></g>
+<rect height="26" rx="4" stroke="#6C6580" stroke-dasharray="3 3" stroke-width="1.2" width="76" x="132" y="160"></rect><text fill="#948DA6" font-family="monospace" font-size="6.5" x="138" y="171">chat genérico:</text><text fill="#948DA6" font-family="monospace" font-size="6.5" x="138" y="181">solo ficticio</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="12" y="176">nada sale sin</text><text fill="#6C6580" font-family="monospace" font-size="7" x="12" y="188">pasar por el abogado</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a régua do prazo. Contagem trivial (dias úteis simples, calendário da comarca): o agente registra, e o advogado revisa às 8h. Qualquer complicação (suspensão, recesso, dobro, repetida): sem data, vira pergunta ao advogado. Vence em menos de um dia útil: chama na hora, a única interrupção do agente jurídico." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#7CE0C6" height="30" opacity=".85" rx="4" width="70" x="20" y="50"></rect><text fill="#0E0D14" font-family="monospace" font-size="7.5" x="26" y="69">trivial</text>
+<rect fill="#F2B45C" height="30" opacity=".85" width="80" x="90" y="50"></rect><text fill="#0E0D14" font-family="monospace" font-size="7.5" x="96" y="69">dudosa</text>
+<rect fill="#E0736F" height="30" opacity=".85" rx="4" width="34" x="170" y="50"></rect><text fill="#0E0D14" font-family="monospace" font-size="7" x="174" y="69">&lt;1 d.ú.</text>
+<g fill="#ECE6D9" font-family="monospace" font-size="6.5">
+<text x="20" y="100">registra;</text><text x="20" y="110">revisión 8h</text>
+<text x="94" y="100">sin fecha;</text><text x="94" y="110">pregunta al abogado</text>
+<text x="166" y="100">llama</text><text x="166" y="110">en el momento</text>
+</g>
+<g fill="#948DA6" font-family="monospace" font-size="6.5">
+<text x="20" y="140">días hábiles simples,</text><text x="20" y="150">calendario de la comarca</text>
+<text x="94" y="140">suspensión · receso</text><text x="94" y="150">doble · repetida</text>
+</g>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="20" y="184">el agente no tiene permiso para inventar una fecha</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a cerca do estagiário, escrita. Dentro (verde): publicações, lista de processos, calendário forense, modelos, formulários, tabela de honorários. Fora (vermelho): segredo de justiça (só o alerta de prazo), documentos pessoais das partes, comunicação advogado-cliente." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect height="170" rx="8" stroke="#7CE0C6" stroke-width="1.5" width="116" x="12" y="14"></rect>
+<text fill="#7CE0C6" font-family="monospace" font-size="7.5" x="20" y="30">el pasante ve</text>
+<g fill="#ECE6D9" font-family="monospace" font-size="6.5">
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="40"></rect><text x="24" y="51">publicaciones</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="60"></rect><text x="24" y="71">lista de procesos</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="80"></rect><text x="24" y="91">calendario judicial</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="100"></rect><text x="24" y="111">modelos simples</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="120"></rect><text x="24" y="131">formularios</text>
+<rect height="15" rx="3" stroke="#948DA6" stroke-width="1" width="100" x="20" y="140"></rect><text x="24" y="151">tabla de honorarios</text>
+</g>
+<rect fill="#221f2e" height="16" rx="4" stroke="#7CE0C6" stroke-width="1.2" width="100" x="20" y="160"></rect><text fill="#7CE0C6" font-family="monospace" font-size="7" x="52" y="171">agente</text>
+<rect height="170" rx="8" stroke="#E0736F" stroke-dasharray="4 3" stroke-width="1.5" width="72" x="136" y="14"></rect>
+<text fill="#E0736F" font-family="monospace" font-size="7.5" x="142" y="30">fuera</text>
+<g fill="#E0736F" font-family="monospace" font-size="6.5"><text x="142" y="56">secreto de</text><text x="142" y="66">justicia*</text><text x="142" y="92">documentos</text><text x="142" y="102">de las partes</text><text x="142" y="128">conversación</text><text x="142" y="138">adv.-cliente</text></g>
+<text fill="#948DA6" font-family="monospace" font-size="6" x="142" y="170">*solo alerta de plazo</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a matriz do agente jurídico, a mais apertada dos cadernos: ler e escrever pode; alterar prazo registrado com aprovação; enviar, comprar, apagar e aprovar (assinar, protocolar) não pode. No jurídico interno, enviar minuta à área vira 'com aprovação'. Rodapé: o que o agente não faz e não lê." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<g fill="#948DA6" font-family="monospace" font-size="6.5"><text x="92" y="16">puede</text><text x="126" y="16">con aprob.</text><text x="176" y="16">no</text></g>
+<g fill="#ECE6D9" font-family="monospace" font-size="7">
+<text x="10" y="34">leer</text><text x="10" y="52">escribir</text><text x="10" y="70">cambiar plazo</text><text x="10" y="88">enviar</text><text x="10" y="106">comprar</text><text x="10" y="124">borrar</text><text x="10" y="142">aprobar/firmar</text>
+</g>
+<path d="M88 22 v126 M122 22 v126 M170 22 v126 M88 22 h118" stroke="#37324a" stroke-width="1"></path>
+<rect fill="#7CE0C6" height="11" opacity=".9" rx="2" width="24" x="92" y="26"></rect><rect fill="#7CE0C6" height="11" opacity=".9" rx="2" width="24" x="92" y="44"></rect>
+<rect fill="#F2B45C" height="11" opacity=".9" rx="2" width="34" x="128" y="62"></rect>
+<rect fill="#E0736F" height="11" opacity=".9" rx="2" width="24" x="176" y="80"></rect><text fill="#F2B45C" font-family="monospace" font-size="6" x="128" y="90">*interno</text>
+<rect fill="#E0736F" height="11" opacity=".9" rx="2" width="24" x="176" y="98"></rect><rect fill="#E0736F" height="11" opacity=".9" rx="2" width="24" x="176" y="116"></rect><rect fill="#E0736F" height="11" opacity=".9" rx="2" width="24" x="176" y="134"></rect>
+<rect height="28" rx="4" stroke="#E0736F" stroke-dasharray="3 3" stroke-width="1.2" width="196" x="10" y="156"></rect>
+<text fill="#E0736F" font-family="monospace" font-size="6.5" x="16" y="168">"no firma, no presenta, no envía,</text><text fill="#E0736F" font-family="monospace" font-size="6.5" x="16" y="179">y no lee procesos bajo secreto de justicia»</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="10" y="196">abogado responsable, con OAB, por línea</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>La confidencialidad es una restricción en la primera línea del encargo: el agente no saca del sistema ningún proceso ni dato de clientes. Esto determina dónde se ejecuta, y el chat genérico solo recibe casos ficticios.</li>
+<li>El plazo es una excepción por definición. Solo se registra el cálculo sencillo, y aun así se revisa a las 8h; el resto se convierte en una pregunta, y si vence en menos de un día hábil, se llama de inmediato.</li>
+<li>Quedan fuera: el secreto judicial (solo la alerta de plazo), los documentos personales de las partes y la conversación entre abogado y cliente. El límite del agente es el límite del pasante, por escrito.</li>
+<li>La matriz es la más estricta de los cuadernos: no se puede enviar, borrar ni aprobar. Un abogado responsable por cada línea y un pie de página de una frase que firma la socia.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu siguiente paso</p>
+<p class="na-win">Acabas de escribir la gobernanza de un agente jurídico, con la confidencialidad, los plazos y la responsabilidad en el lugar de siempre.</p>
+<p class="na-action">En los próximos 15 minutos, muéstrale el pie de página a la socia o a la dirección jurídica y pregunta: «¿esto responde a tu primera duda sobre la IA en el estudio?». Si no responde, reescribe el pie de página, no la matriz.</p>
+<p class="na-hook">En la última clase armas todo en el Kit del Arquitecto de Agentes, a partir de la configuración predefinida para estudios jurídicos, y ensayas el agente de plazos con un caso ficticio en un chat de IA.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#aula-1">← clase 1</a><a href="#aula-3">siguiente: la especificación en el kit →</a></nav>
+<footer>Lección 2 · Agentes en el despacho de abogados · INEMA.CLUB PRO</footer>
+<script id="cards-2" type="application/json">
+[
+  {"front":"Um advogado do escritório testou a contagem de prazos colando publicações reais no chat de IA. O que você diz a ele, e como se testa a contagem sem isso?","back":"Publicação tem nome das partes e número do processo: sigilo saindo do escritório para um serviço externo. Testa-se com publicações inventadas, mesma estrutura, nomes trocados; a contagem se prova igual."},
+  {"front":"O agente encontrou uma intimação em processo com litisconsortes de advogados diferentes. Que regra se aplica, e o que aparece na agenda?","back":"Contagem não trivial (possível prazo em dobro): o agente não registra data; devolve a pergunta 'prazo em dobro? litisconsortes com advogados diferentes' ao advogado. Na agenda, só o alerta, sem data."},
+  {"front":"Qual a diferença de tratamento entre um processo em segredo de justiça e um processo comum no controle de prazos?","back":"No comum, o agente lê, resume em cinco linhas e prepara o rascunho simples. No de segredo, só registra 'processo em segredo, prazo a contar pelo advogado', sem ler o conteúdo nem resumir."},
+  {"front":"No jurídico interno, a diretoria quer que o agente envie a minuta direto à área, sem o advogado clicar, 'porque é interno'. Como você decide?","back":"Enviar interno pode ser 'com aprovação', mas nunca 'pode': nenhuma minuta sai sem um advogado revisar e o nome dele constar. Interno não muda quem responde pela minuta."},
+  {"front":"Uma linha da matriz ficou 'alterar prazo registrado: pode'. Por que isso é um problema, mesmo que o agente tenha acertado a contagem?","back":"Porque o prazo registrado foi conferido por um advogado; alterar sem aprovação e sem registro apaga essa conferência. Fica 'com aprovação' da secretária, sempre com registro de quem, quando e por quê."}
+]
+</script>
+<!-- COMPLETUDE aula-2 | tipo=FUNDAMENTO | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="21min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Dr. Ribeiro, Camila, Dr. Ribeiro+Dra. Castro, Camila)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="tarefa"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~12 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-2"> presente (5 cartões: aplicação, aplicação, contraste, decisão, diagnóstico)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [OK] teste-se-FUND      tipo=FUNDAMENTO: presente (1 quiz data-fb, step 03)
+  dosagem: quiz + cartões + qbefore-after (step 02) + qanchor (step 04) = 4 obrigatórios (teto 5). densidade: 2 quadros em 4 steps, não adjacentes. jargão de domínio: segredo de justiça (.gterm).
+-->
+</section>
+<!-- ===== AULA 3 · PRÁTICA/INTEGRAÇÃO ===== -->
+<section class="view" data-aula="3" data-tempo="24min" id="v-aula-3">
+<header class="hero"><div class="hero-inner">
+<div>
+<p class="kicker">Cuaderno de Abogacía · Lección 3</p>
+<h1>Tu especificación en el kit:<br/><em>control de plazos</em></h1>
+<p class="promise">Al final de esta lección podrás crear la especificación del agente de tu despacho en el Kit del Arquitecto de Agentes, a partir del preset de abogacía, y ensayarla en un chat de IA con un caso ficticio.</p>
+<p class="why">Tienes el proceso con la línea entre preparar y firmar (clase 1) y la matriz con el pie de página (clase 2). Falta la página que la socia lee en ocho minutos y que quien se encarga del sistema del estudio jurídico puede construir. El preset de abogacía del kit ya incluye un estudio de tres abogados y 180 procesos, con los siete bloques completos y las reglas de este cuaderno incorporadas: confidencialidad, plazos bajo revisión humana, procesos bajo secreto de justicia fuera del alcance, nada firmado ni presentado. Tu trabajo es cambiar lo que corresponde a tu estudio jurídico y ensayarlo.</p>
+<p class="cue"><span class="arw">↓</span> role para estudiar</p>
+</div>
+<!-- herofig · METÁFORA-DO-MUNDO-REAL: a pauta do dia impressa e presa na prancheta, com os prazos marcados e a caneta ao lado, pronta para a revisão das 8h -->
+<div class="herofig"><svg aria-hidden="true" fill="none" viewbox="0 0 300 240">
+<rect fill="#1a1824" height="180" rx="6" stroke="#948DA6" stroke-width="2" width="140" x="80" y="30"></rect>
+<rect fill="#948DA6" height="18" rx="4" width="40" x="130" y="20"></rect>
+<rect fill="#ECE6D9" height="150" opacity=".92" rx="2" width="116" x="92" y="48"></rect>
+<text fill="#0E0D14" font-family="monospace" font-size="9" opacity=".7" x="100" y="66">8h</text>
+<g opacity=".5" stroke="#0E0D14" stroke-width="2"><path d="M104 84 h60 M104 102 h80 M104 120 h70 M104 138 h84 M104 156 h60 M104 174 h76"></path></g>
+<rect fill="#7CE0C6" height="10" rx="2" width="14" x="186" y="78"></rect><rect fill="#F2B45C" height="10" rx="2" width="14" x="186" y="96"></rect><rect fill="#7CE0C6" height="10" rx="2" width="14" x="186" y="114"></rect><rect fill="#E0736F" height="10" rx="2" width="14" x="186" y="132"></rect><rect fill="#7CE0C6" height="10" rx="2" width="14" x="186" y="150"></rect><rect fill="#7CE0C6" height="10" rx="2" width="14" x="186" y="168"></rect>
+<path d="M236 110 l30 -40" stroke="#948DA6" stroke-linecap="round" stroke-width="6"></path><path d="M232 116 l6 -9" stroke="#F2B45C" stroke-linecap="round" stroke-width="6"></path>
+<path d="M40 180 q10 -30 34 -26" fill="none" opacity=".5" stroke="#948DA6" stroke-width="2"></path>
+</svg></div>
+</div></header>
+<div class="layout">
+<div class="col">
+<section class="step" data-fig="1" data-kind="fundamento">
+<h2><span class="n">01</span> El caso que incluye la configuración predefinida y lo que cambia de un estudio a otro</h2>
+<p>La configuración predefinida para estudios jurídicos del kit corresponde a un estudio con tres abogados y 180 procesos civiles y laborales, que controla los plazos y prepara las acciones del día. Las reglas de este cuaderno ya están escritas: no presenta escritos, no firma, no radica; no redacta documentos que requieran una tesis, solo resúmenes; secreto en la primera línea; no se asigna fecha a un plazo cuyo cálculo sea dudoso; en los casos bajo secreto de justicia, solo genera una alerta; «enviar: no puede»; «aprobar: no puede», con la observación de que firmar y presentar es responsabilidad del abogado.</p>
+<p>Lo que cambia de un estudio a otro es previsible: las áreas de práctica y los tribunales (el calendario judicial cambia según el distrito), el servicio de publicaciones, las plantillas para escritos simples, quién es la secretaria y qué abogados responden por cada asunto. En el área jurídica interna, todo el proceso cambia y pasa a enfocarse en contratos estándar o plazos contractuales, pero la matriz queda casi igual, con «enviar internamente: con aprobación» como única diferencia.</p>
+<!-- ex-prof --><p>El Dr. Ribeiro cargó el preset y cambió seis cosas: las áreas (agregó familia, marcada como confidencial), los dos distritos judiciales con calendarios propios, el servicio de publicaciones que usa el despacho, los modelos del despacho, los nombres de los tres abogados responsables y el conjunto de quince notificaciones del lunes, con números y partes inventados. Camila cambió el proceso a contratos estándar y mantuvo el bloque 7 del preset con una línea modificada.</p>
+<div class="mobfig" data-mobfig="1"></div>
+<button class="readbtn" data-read="s1">marcar como leído</button>
+</section>
+<section class="step" data-fig="2" data-kind="ferramenta" data-versao="Kit do Arquiteto de Agentes v1, set/2026">
+<h2><span class="n">02</span> Cargar el preset y marcar el área activa las reglas de la práctica jurídica</h2>
+<p>En el kit, el selector «cargar ejemplo por área» tiene la opción «práctica jurídica». Al cargarla, el campo «área» queda en «práctica jurídica», y eso activa tres verificaciones adicionales a las generales del curso base: si «secreto» o «confidencialidad» no aparece en ningún lugar, se señala una omisión; si la palabra «plazo» no aparece en «detener», «llamar» o «excepciones», se señala otra; y si alguna acción u objetivo incluye «presentar», «firmar» o «radicar» sin una negación junto a esas palabras, se señala una tercera.</p>
+<p>Esto parece una pantalla llena de campos, pero funciona como la lista del día sujeta al portapapeles: cada campo es un dato que completas una vez y, a partir de ahí, el kit arma la página automáticamente. Solo modificas lo que corresponde a tu despacho. Si borras por accidente la restricción de confidencialidad, la laguna aparece debajo de la especificación antes de que la entregues.</p>
+<!-- ex-prof --><p>Camila, al adaptar el preset para contratos estándar, borró la regla de plazos porque «los contratos no tienen notificaciones». El kit indicó: «el plazo procesal no está en detenerse, consultar ni excepciones». Se dio cuenta de que los plazos contractuales (renovación automática, preaviso) eran lo mismo con otro nombre y escribió: «plazo contractual con cómputo ambiguo: no registrar la fecha, preguntar al abogado». La laguna que parecía inaplicable era la más importante.</p>
+<div class="qapply">
+<p class="qak">En tu estudio, el primer proceso suele ser</p>
+<ul>
+<li><b>Abogado de despacho propio:</b> control de plazos a partir de las publicaciones, lo que ya incluye el preset. Segundo proceso: intake de un cliente nuevo, con la lista de documentos y el resumen de los hechos para que el abogado decida.</li>
+<li><b>Coordinadora del área legal interna:</b> contratos estándar a partir del formulario de las áreas, con lo que se salga de lo estándar marcado; después, plazos contractuales (renovación, preaviso, garantías) con el mismo criterio que los plazos procesales.</li>
+<li><b>Socia que firma:</b> ella lee primero el pie de la especificación; la batería de casos es lo que pide ver antes de aprobar.</li>
+</ul>
+</div>
+<div class="mobfig" data-mobfig="2"></div>
+<button class="readbtn" data-read="s2">marcar como leído</button>
+</section>
+<section class="step" data-fig="3" data-kind="fundamento">
+<h2><span class="n">03</span> La batería de casos de la firma incluye los casos difíciles conocidos</h2>
+<p>En la práctica jurídica, los casos difíciles de la batería son los que todo estudio ya vivió: notificación con un feriado local en medio del plazo; plazo duplicado por litisconsortes con abogados diferentes; publicación en dos diarios el mismo día; notificación repetida; proceso bajo secreto; publicación que exige contestación o recurso; despacho sin plazo; proceso que no está en el sistema; dos procesos del mismo cliente el mismo día; notificación de sentencia con plazo de 15 días hábiles que atraviesa el receso.</p>
+<p>Cada caso se ingresa con una referencia inventada (número ficticio, partes ficticias, fecha real del calendario) y con lo que hizo el abogado en ese momento. La batería se vuelve a ejecutar después de cada cambio: cuando Dr. Ribeiro cambió el calendario del tribunal por el de la comarca, dos casos tuvieron respuestas distintas, y él lo vio antes de que lo hiciera el agente. La socia pide ver la batería antes de aprobar porque es lo que le permite responder a "¿y si el agente calcula mal un plazo?" con casos y no con promesas.</p>
+<!-- ex-prof --><p>La batería de Dr. Ribeiro tiene quince casos, y el número 11 es el que muestra a quienes dudan: una notificación de sentencia publicada el viernes antes del receso de fin de año. El agente de la primera ronda contó quince días hábiles seguidos. La nueva regla, "plazo que atraviesa un receso o una suspensión: no registrar, preguntar", se incorporó al bloque 6 antes de cualquier notificación real. Él dice que ese caso, por sí solo, pagó el cuaderno.</p>
+<div class="mobfig" data-mobfig="3"></div>
+<button class="readbtn" data-read="s3">marcar como leído</button>
+</section>
+<section class="step" data-fig="4" data-kind="fundamento">
+<h2><span class="n">04</span> Lo que suele revelar un ensayo simulado en un estudio jurídico</h2>
+<p>Cuando pegas la especificación en el chat con el prompt de ensayo del kit, el chat asume el papel de coordinador y ejecuta un caso ficticio. En el ejercicio de la abogacía, suelen aparecer tres vacíos. El primero: la publicación exige una tesis y la especificación dice «solo resumen», pero no indica dónde va el resumen ni quién recibe el aviso. El segundo: hay dos abogados en el sistema y la especificación no indica a quién corresponde el plazo. El tercero: la notificación llegó en dos diarios y el coordinador no sabe qué fecha cuenta.</p>
+<p>Cada una se convierte en una línea nueva: "publicación que requiere una tesis: resumen en la agenda del responsable, marcado 'tesis', sin borrador". "Dos responsables: plazo en la agenda de ambos, marcado 'confirmar responsable'". "Dos diarios: no registrar la fecha, preguntar al abogado". Ejecuta tres casos: uno común, uno difícil y una excepción. Cuando los tres pasan, la página está lista para la socia y para quien se encarga del sistema.</p>
+<!-- ex-prof --><p>En el ensayo del Dr. Ribeiro, el chat, en el papel de coordinador, preguntó: «la notificación es de un proceso bajo secreto de justicia y vence en dos días hábiles; ¿registro la alerta en la agenda o llamo al abogado ahora?». La especificación decía «secreto: solo alerta» y «menos de un día hábil: llamar», pero no indicaba qué hacer cuando se combinaban el secreto y la urgencia. Él agregó: «secreto con plazo corto: alerta en la agenda y mensaje al abogado, sin contenido». Diez minutos, una línea y un caso real dos meses después.</p>
+<div class="qsteps">
+<p class="qsk">Orden para adaptar la configuración predefinida para estudios jurídicos</p>
+<ol>
+<li><b>Bloque 1</b>: nombre del estudio, resultado en tu frase (lo que cada abogado sabe a las 8h), quién participa hoy.</li>
+<li><b>Bloques 2 y 3</b>: tus jurisdicciones y calendarios, servicio de publicaciones, modelos; regla de plazo en las decisiones. No elimines el secreto ni «no presenta, no firma».</li>
+<li><b>Bloques 4 y 5</b>: sistema del estudio con puerta de servicio (sí, no, ?) e inventario, con calendario judicial por jurisdicción y responsable.</li>
+<li><b>Bloque 6</b>: cómputo trivial × dudoso para detenerse; «menos de un día hábil» para avisar; batería de 10 a 20 notificaciones inventadas, con las difíciles conocidas.</li>
+<li><b>Bloque 7</b>: abogados responsables identificados; «enviar» y «aprobar» no se tocan; secreto de justicia y documentos de las partes en la lista de exclusión.</li>
+<li><b>Pie de página y vacíos</b>: la frase de la clase 2 al inicio de la especificación; cero vacíos sobre abogacía antes de ensayar.</li>
+</ol>
+</div>
+<div class="mobfig" data-mobfig="4"></div>
+<button class="readbtn" data-read="s4">marcar como leído</button>
+</section>
+<section class="practice" data-mode="prompt" data-practice="p3">
+<p class="pk">Practica ahora <span class="pcount">0/4 completadas</span></p>
+<h3 class="ph">Arma la especificación de tu estudio en el kit y ensáyala</h3>
+<p class="pgoal">En unos 15 minutos, carga el preset de práctica jurídica en el kit, adáptalo a tu despacho o área legal, copia el prompt de ensayo y ejecuta un caso ficticio en un chat de IA para recibir la lista de lagunas.</p>
+<p class="psafe">La especificación no tiene número de expediente ni nombre de cliente: tiene reglas, nombres de sistemas y criterios. El caso del ensayo es inventado (expediente, partes, fechas). No se construye ningún agente, no se toca ningún sistema, no se presenta ni se envía nada. Si el chat "presenta" o "firma" algo en la simulación, eso es un hallazgo sobre tu matriz: anótalo y ajústala.</p>
+<div class="pcodewrap"><button class="pcopy" type="button">copiar</button><pre class="pcode">Passo a passo (o prompt de ensaio vem pronto do kit):
+
+1. Abra https://inematds.github.io/kit-arquiteto-agentes/
+2. "carregar exemplo por área" → advocacia. Confira que "área: advocacia" ficou marcada.
+3. Adapte os sete blocos na ordem do passo 04 desta aula. Zero lacunas de advocacia na lista abaixo da especificação.
+4. Em "Prompt de ensaio simulado", escreva o caso fictício, por exemplo:
+   &lt;Processo 0012345-67.2026 (fictício), Dr. R. responsável, intimação de sentença publicada segunda, 15 dias úteis, feriado municipal na quinta, publicação também saiu no diário eletrônico na terça; processo comum, não é segredo&gt;
+5. "copiar prompt com a especificação" → cole numa conversa nova do seu chat de IA.
+6. Leia a narração: o coordenador deve parar pelo menos uma vez (dois diários → perguntar qual data conta). Anote os itens de "o que faltou".</pre></div>
+<ol class="psteps">
+<li><label><input data-ptask="1" type="checkbox"/> Carga el preset de práctica jurídica y adapta los bloques 1 a 7, en el orden del paso 04, con la matriz y el pie de la lección 2. Quedó bien cuando la lista de lagunas no tiene ningún elemento que empiece con «Práctica jurídica:».</label></li>
+<li><label><input data-ptask="2" type="checkbox"/> Escribe un caso ficticio que incluya al menos una dificultad conocida del paso 03 (feriado local, dos boletines, plazo duplicado, secreto, requiere argumentación). Inventa el número, las partes y los nombres; usa fechas reales del calendario.</label></li>
+<li><label><input data-ptask="3" type="checkbox"/> Copia el prompt con la especificación, pégalo en una conversación nueva y sigue el proceso. El coordinador debe detenerse al menos una vez para preguntar. Si registró una fecha dudosa sin preguntar o si «presentó» algo, la ficha o la matriz son demasiado flexibles: anota dónde debería haberse detenido.</label></li>
+<li><label><input data-ptask="4" type="checkbox"/> Lee la lista de «lo que faltó» y agrega cada elemento como una línea nueva en algún bloque del kit. Estará listo cuando la especificación corregida tenga al menos una línea nueva, hayas descargado el .md y sepas a quién enviarlo: a la socia y a quien se encarga del sistema del despacho.</label></li>
+</ol>
+<p class="pdone">Acabas de crear la especificación de un agente para tu estudio jurídico, con los límites de un pasante y la responsabilidad en el lugar de siempre, y la ensayaste antes de construirlo. Esta página es lo que separa «vamos a usar IA» de un proyecto que la socia firma.</p>
+</section>
+</div>
+<aside class="rail"><div class="railsticky">
+<div class="figstage">
+<div class="fig on" data-cap="&lt;b&gt;Fig.&lt;/b&gt; o preset de advocacia como esqueleto e o que muda por escritório (verde): áreas e comarcas, serviço de publicações, modelos, responsáveis, bateria. As linhas âmbar não se trocam na primeira versão: sigilo, prazo duvidoso sem data, segredo só alerta, enviar e aprovar não pode." data-fig="1"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect height="172" rx="8" stroke="#37324a" stroke-width="1.5" width="192" x="14" y="14"></rect>
+<text fill="#948DA6" font-family="monospace" font-size="7.5" x="20" y="30">preset de abogacía: 3 abogados, 180 procesos</text>
+<g font-family="monospace" font-size="6.5">
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="86" x="20" y="40"></rect><text fill="#0E0D14" x="24" y="50">áreas y distritos judiciales</text>
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="90" x="110" y="40"></rect><text fill="#0E0D14" x="114" y="50">servicio de publicaciones</text>
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="86" x="20" y="60"></rect><text fill="#0E0D14" x="24" y="70">modelos simples</text>
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="90" x="110" y="60"></rect><text fill="#0E0D14" x="114" y="70">abogados responsables</text>
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="86" x="20" y="80"></rect><text fill="#0E0D14" x="24" y="90">calendario por comarca</text>
+<rect fill="#7CE0C6" height="14" opacity=".8" rx="2" width="90" x="110" y="80"></rect><text fill="#0E0D14" x="114" y="90">batería inventada</text>
+<rect height="14" rx="2" stroke="#F2B45C" stroke-width="1.2" width="180" x="20" y="108"></rect><text fill="#F2B45C" x="24" y="118">confidencialidad en la 1.ª línea · plazo dudoso sin fecha</text>
+<rect height="14" rx="2" stroke="#F2B45C" stroke-width="1.2" width="180" x="20" y="128"></rect><text fill="#F2B45C" x="24" y="138">secreto: solo alerta · docs de las partes fuera</text>
+<rect height="14" rx="2" stroke="#F2B45C" stroke-width="1.2" width="180" x="20" y="148"></rect><text fill="#F2B45C" x="24" y="158">enviar: no · aprobar/firmar/presentar: no</text>
+</g>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="20" y="180">verde = cambio · ámbar = no se toca</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; ao marcar 'área: advocacia', o kit liga três verificações a mais: sigilo ou confidencialidade escritos, prazo em parar/chamar/exceções, e protocolar/assinar/peticionar só com a negação junto. Cada uma acende uma lacuna (âmbar) abaixo da especificação." data-fig="2"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect height="22" rx="4" stroke="#7CE0C6" stroke-width="1.5" width="120" x="14" y="16"></rect><text fill="#7CE0C6" font-family="monospace" font-size="7.5" x="20" y="31">área: abogacía</text>
+<path d="M74 38 v14 M30 52 h88 M30 52 v10 M74 52 v10 M118 52 v10" stroke="#948DA6" stroke-width="1.2"></path>
+<g fill="#ECE6D9" font-family="monospace" font-size="6.5">
+<rect height="34" rx="3" stroke="#948DA6" stroke-width="1" width="60" x="8" y="62"></rect><text x="12" y="76">confidencialidad</text><text x="12" y="86">¿por escrito?</text>
+<rect height="34" rx="3" stroke="#948DA6" stroke-width="1" width="60" x="74" y="62"></rect><text x="78" y="76">plazo en</text><text x="78" y="86">¿detenerse/avisar?</text>
+<rect height="34" rx="3" stroke="#948DA6" stroke-width="1" width="66" x="140" y="62"></rect><text x="144" y="76">presenta/</text><text x="144" y="86">¿firma? no</text>
+</g>
+<path d="M38 96 v14 M104 96 v14 M173 96 v14" stroke="#F2B45C" stroke-width="1.2"></path>
+<rect fill="#221f2e" height="60" rx="6" stroke="#37324a" stroke-width="1" width="192" x="14" y="110"></rect>
+<text fill="#948DA6" font-family="monospace" font-size="7" x="20" y="124">brechas</text>
+<rect fill="#F2B45C" height="10" opacity=".7" rx="2" width="180" x="20" y="130"></rect><rect fill="#F2B45C" height="10" opacity=".7" rx="2" width="180" x="20" y="144"></rect><rect fill="#F2B45C" height="8" opacity=".7" rx="2" width="180" x="20" y="158"></rect>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="20" y="188">el plazo contractual es un plazo: la falta de información cuenta</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; a bateria da advocacia: dez casos comuns (verde) e os difíceis conhecidos (âmbar): feriado local, prazo em dobro, dois diários, intimação repetida, segredo, exige tese, atravessa recesso. O caso 11, sentença na sexta antes do recesso, é o que se mostra a quem duvida." data-fig="3"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<g>
+<rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="14" y="20"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="50" y="20"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="86" y="20"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="122" y="20"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="158" y="20"></rect>
+<rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="14" y="56"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="50" y="56"></rect><rect fill="#7CE0C6" height="30" opacity=".8" rx="4" width="30" x="86" y="56"></rect>
+<rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="122" y="56"></rect><rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="158" y="56"></rect>
+<rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="14" y="92"></rect><rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="50" y="92"></rect><rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="86" y="92"></rect><rect fill="#F2B45C" height="30" opacity=".9" rx="4" width="30" x="122" y="92"></rect><rect height="30" rx="4" stroke="#F2B45C" stroke-width="2" width="30" x="158" y="92"></rect>
+</g>
+<text fill="#F2B45C" font-family="monospace" font-size="8" x="163" y="112">11</text>
+<g fill="#948DA6" font-family="monospace" font-size="6.5"><text x="14" y="140">feriado local · doble · 2 diarios</text><text x="14" y="152">repetida · secreto · requiere una tesis</text></g>
+<rect height="24" rx="4" stroke="#F2B45C" stroke-width="1.2" width="192" x="14" y="160"></rect><text fill="#F2B45C" font-family="monospace" font-size="6.5" x="20" y="175">11: sentencia el viernes antes del receso</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="14" y="196">lo que la socia pide ver antes de aprobar</text>
+</svg></div>
+<div class="fig" data-cap="&lt;b&gt;Fig.&lt;/b&gt; o ciclo do ensaio no escritório: especificação e caso fictício entram, o chat faz o coordenador, e as três lacunas típicas (exige tese: onde vai o resumo; dois responsáveis; dois diários) voltam em âmbar e viram linhas novas. Três casos passando, a página vai para a sócia e para o sistema." data-fig="4"><svg aria-hidden="true" fill="none" viewbox="0 0 220 200">
+<rect fill="#221f2e" height="56" rx="6" stroke="#7CE0C6" stroke-width="1.5" width="62" x="12" y="66"></rect><text fill="#7CE0C6" font-family="monospace" font-size="7" x="18" y="90">especif.</text><text fill="#948DA6" font-family="monospace" font-size="6.5" x="18" y="104">+ caso ficticio</text>
+<path d="M74 94 h30" stroke="#948DA6" stroke-width="1.5"></path>
+<rect height="76" rx="10" stroke="#37324a" stroke-width="1.5" width="104" x="104" y="56"></rect><rect fill="#221f2e" height="14" rx="10" width="104" x="104" y="56"></rect>
+<text fill="#ECE6D9" font-family="monospace" font-size="7" x="112" y="84">chat = coordinador</text>
+<g fill="#F2B45C" font-family="monospace" font-size="6">
+<rect height="9" rx="2" stroke="#F2B45C" stroke-width="1" width="92" x="110" y="92"></rect><text x="114" y="99">exige una tesis: ¿dónde va el resumen?</text>
+<rect height="9" rx="2" stroke="#F2B45C" stroke-width="1" width="92" x="110" y="104"></rect><text x="114" y="111">¿dos responsables?</text>
+<rect height="9" rx="2" stroke="#F2B45C" stroke-width="1" width="92" x="110" y="116"></rect><text x="114" y="123">dos diarios: ¿qué fecha?</text>
+</g>
+<path d="M156 132 v20 h-114 v-30" fill="none" stroke="#F2B45C" stroke-width="1.5"></path><path d="M39 126 l3 -4 3 4" fill="none" stroke="#F2B45C" stroke-width="1.5"></path>
+<text fill="#F2B45C" font-family="monospace" font-size="7" x="50" y="168">brecha → nueva línea → vuelve a ejecutarse</text>
+<text fill="#948DA6" font-family="monospace" font-size="8" x="12" y="30">3 casos: común · difícil · excepción</text>
+<text fill="#6C6580" font-family="monospace" font-size="7" x="12" y="192">3 pasan → socia + sistema del estudio</text>
+</svg></div>
+</div>
+<p class="railcap"></p>
+<div class="steps-ind"></div>
+<p class="sidenote">Resalta cualquier fragmento para convertirlo en una tarjeta de repaso.</p>
+</div></aside>
+</div>
+<div class="fecho-wrap">
+<div class="recap-autor">
+<p class="rak">Resumen</p>
+<ul>
+<li>La configuración predefinida para estudios jurídicos incluye un estudio con tres abogados en los siete bloques, con las reglas del cuaderno incorporadas. Cambias los distritos, las publicaciones, las plantillas, los responsables y la batería; no cambias el secreto, el plazo sin fecha, el secreto de justicia ni «enviar/aprobar: no puede».</li>
+<li>Marcar «área: práctica jurídica» activa tres verificaciones adicionales en el kit. El plazo contractual también es un plazo: la laguna que parece inaplicable suele ser la más importante.</li>
+<li>Los casos difíciles de la batería son los que todo estudio ya vivió, y el caso de la sentencia antes del receso es el que convence a quienes dudan.</li>
+<li>El ensayo suele revelar dónde se envía el resumen cuando se requiere una tesis, a quién le corresponde el plazo cuando hay dos responsables y qué fecha cuenta cuando hay dos diarios. Cada respuesta se convierte en una línea nueva.</li>
+</ul>
+</div>
+<div class="next-action">
+<p class="nak">Tu siguiente paso</p>
+<p class="na-win">Acabas de especificar y ensayar el agente de tu estudio jurídico, con los límites de un pasante y la responsabilidad en el lugar de siempre.</p>
+<p class="na-action">En los próximos 15 minutos, envíale el .md a la socia con el pie de página en la primera línea y una frase: «esto lo lee, calcula y prepara el agente; esto nunca lo ve; esto no lo hace; y este es el abogado responsable de cada línea». Pídele ocho minutos y propón la batería de casos como pregunta.</p>
+<p class="na-hook">El segundo de los diez procesos (recepción de casos, contratos estándar, cobro de honorarios) empieza con la clase 1 de este cuaderno, usando el mismo kit y la misma matriz. Te llevará la mitad del tiempo.</p>
+</div>
+</div>
+<nav class="lnav"><a href="#aula-2">← clase 2</a><a href="#trilha">completar el cuaderno →</a></nav>
+<footer>Lección 3 · Agentes en el despacho de abogados · INEMA.CLUB PRO</footer>
+<!-- aula PRÁTICA/INTEGRAÇÃO: 3 cartões de aplicação integradores, decisão registrada -->
+<script id="cards-3" type="application/json">
+[
+  {"front":"Ao adaptar o preset para contratos padrão, você apagou a regra de prazo 'porque contrato não tem intimação'. Que lacuna o kit acende, e o que você escreve no lugar?","back":"'Prazo processual não está em parar, chamar ou exceções'. Prazo contratual é prazo: 'renovação, aviso prévio e garantia com contagem ambígua: não registrar data, perguntar ao advogado'."},
+  {"front":"No ensaio, o coordenador registrou a data de uma intimação publicada em dois diários no mesmo dia, sem perguntar. O que faltou, e em que bloco entra?","back":"A regra 'dois diários: não registrar data, perguntar ao advogado qual conta'. Entra no bloco 6 (parar) e no bloco 2 (exceções). É contagem duvidosa, e o agente não chuta data."},
+  {"front":"A sócia lê a especificação e pergunta: 'e se o agente errar um prazo?'. O que você mostra, em vez de prometer?","back":"A bateria de casos, com os difíceis conhecidos (feriado local, dobro, dois diários, recesso, segredo) e o resultado de cada rodada. E a regra: contagem duvidosa não recebe data, vira pergunta; o advogado revisa tudo às 8h."}
+]
+</script>
+<!-- COMPLETUDE aula-3 | tipo=PRATICA | steps=4
+  [OK] promise            .promise no cold-open (1)
+  [OK] why                .why após a promessa (1)
+  [OK] tempo              data-tempo="24min" no view + render no cold-open (1)
+  [OK] exemplo-profissao  exemplo aplicado em 100% dos steps (4/4: Dr. Ribeiro+Camila, Camila, Dr. Ribeiro, Dr. Ribeiro)
+  [OK] apoio-visual       figura conceitual legendada em 100% dos steps (4/4, data-fig 1..4)
+  [OK] practice           .practice[data-mode="prompt"] (exatamente 1)
+  [OK] psafe              .psafe dentro da prática (1)
+  [OK] pgoal-tempo        .pgoal com tempo declarado (~15 min) (1)
+  [OK] recap-autor        .recap-autor no fecho (1)
+  [OK] next-action        .next-action no fecho (1)
+  [OK] cards              <script id="cards-3"> presente (3 cartões de aplicação integradores)
+  [OK] anti-duplicacao    §11.3 — 3 testes passam (substring / forma / operação)
+  [N/A] teste-se-FUND     aula é PRÁTICA/INTEGRAÇÃO (obrigação não se aplica); sem teste-se opcional
+  dosagem: qsteps (step 04) + mini-caso integrador (prosa: Dr. Ribeiro e Camila adaptando o preset e ensaiando) obrigatórios + qapply opcional (step 02, 3 perfis) = 3 (teto 5). densidade: 2 quadros em 4 steps, não adjacentes. data-versao no step 02. rampa de acesso antes da tela do kit ("pauta do dia na prancheta").
+-->
+</section>
+<script src="../assets/curso.js"></script>
+</body>
+</html>
